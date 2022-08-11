@@ -1,6 +1,7 @@
-from datetime import datetime 
-from config import status
-from functions import random_lst_gen
+from datetime import datetime
+from time import sleep 
+from config import status,_Hour, day
+from functions import random_lst_gen, isToday, alert
 class HappyApp:
     def __init__(self, team : dict):
         self.team = team
@@ -14,8 +15,21 @@ class HappyApp:
                             random_lst_gen(len(keva)))
                         )
         keva_sorted = {k: v for k, v in sorted(rnd_dict.items(), key=lambda item: item[1])}
-        print(keva_sorted)
+
+        rnd_dict = dict(zip(list(sadir.keys()),
+                            random_lst_gen(len(sadir)))
+                        )
+        sadir_sorted = {k: v for k, v in sorted(rnd_dict.items(), key=lambda item: item[1])}
 
     def run(self):
+
+        while True:
+            
+            if isToday(day.saturday):
+                alert() # add enum for alert code
+            if isToday(day.tuesday):
+                alert() # add enum for alert code
+                
+            sleep(_Hour)
         
-        
+

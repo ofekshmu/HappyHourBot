@@ -1,4 +1,7 @@
 import random
+from datetime import datetime
+from config import day
+
 def random_lst_gen(n : int):
     """
     input: @n - a positive integer number
@@ -11,3 +14,5 @@ def random_lst_gen(n : int):
         rnd_lst.append(lst.pop(i))
     return rnd_lst
 
+def isToday(d : day):
+    if day.f
