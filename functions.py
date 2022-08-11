@@ -20,3 +20,7 @@ def isToday(d : day, time = None):
     else:
         return datetime.today().weekday() == day.value and \
             time == datetime.today().hour
+
+def scramble(lst):
+    rnd_lst = random_lst_gen(len(lst))
+    return [x for _, x in sorted(zip(lst, rnd_lst), key=lambda pair: pair[1])]
