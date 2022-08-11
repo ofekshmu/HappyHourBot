@@ -14,5 +14,9 @@ def random_lst_gen(n : int):
         rnd_lst.append(lst.pop(i))
     return rnd_lst
 
-def isToday(d : day):
-    if day.f
+def isToday(d : day, time = None):
+    if time == None:
+        return datetime.today().weekday() == day.value
+    else:
+        return datetime.today().weekday() == day.value and \
+            time == datetime.today().hour

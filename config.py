@@ -5,13 +5,13 @@ class status(Enum):
     keva = 1
 
 class day(Enum):
-    sunday = 0
-    monday = 1
-    tuesday = 2
-    wednesday = 3
-    tursday = 4
-    friday = 5
-    saturday = 6
+    sunday = 6
+    monday = 0
+    tuesday = 1
+    wednesday = 2
+    tursday = 3
+    friday = 4
+    saturday = 5
 
 _Team = {'ofek_shmuel' : ("0543238582", status.keva),
         'harel_finaly': ("temp", status.keva),
@@ -25,3 +25,6 @@ _Team = {'ofek_shmuel' : ("0543238582", status.keva),
 
 
 _Hour = 60*60
+_8AM = 8
+_8PM = 20
+_1PM = 13
