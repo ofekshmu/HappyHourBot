@@ -13,6 +13,11 @@ class day(Enum):
     friday = 4
     saturday = 5
 
+class MessageType(Enum):
+    reminder = 0
+    NewPeriod = 1
+
+
 _Team = {'ofek_shmuel' : ("0543238582", status.keva),
         'harel_finaly': ("temp", status.keva),
         'ofek_ofir': ("temp", status.keva),

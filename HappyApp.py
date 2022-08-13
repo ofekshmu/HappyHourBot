@@ -1,7 +1,7 @@
 from datetime import datetime
 from time import sleep 
-from config import status,_Hour, day, _1PM, _8AM, _8PM
-from functions import random_lst_gen, isToday, alert, scramble
+from config import MessageType, status,_Hour, day, _1PM, _8AM, _8PM
+from functions import isToday, scramble, alert
 from queue import Queue
 class HappyApp:
     def __init__(self, team : dict):
@@ -26,22 +26,26 @@ class HappyApp:
 
         self.queue = Queue(scramble(tot_names))
 
+    def popQueue(self):
+        self.queue.dequeue()
+        if self.queue.isEmpty():
+            self.roll()
+            alert(data=self.queue.getQueue(),
+                  msg_type=MessageType.NewPeriod)
+        else:
+            alert(data=self.queue.head(), 
+                  msg_type=MessageType.reminder)
 
     def run(self):
 
         while True:
 
-            if self.queue.isEmpty():
-                self.roll()
-                alert()
-
             if isToday(day.saturday, _8PM):
-                alert() # add enum for alert code
+                alert(self.queue.head(), MessageType.reminder)
+
             if isToday(day.tuesday, _8AM):
-                alert() # add enum for alert code
+                alert(self.queue.head(), MessageType.reminder)
+
             if isToday(day.wednesday, _1PM):
-                alert() # add enum for alert code
-                
-            sleep(_Hour)
-        
+                self.popQueue()
 

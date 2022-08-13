@@ -1,6 +1,8 @@
+from math import remainder
 import random
 from datetime import datetime
-from config import day
+from .HappyApp import HappyApp
+from config import day, _Team, MessageType
 
 def random_lst_gen(n : int):
     """
@@ -24,3 +26,32 @@ def isToday(d : day, time = None):
 def scramble(lst):
     rnd_lst = random_lst_gen(len(lst))
     return [x for _, x in sorted(zip(lst, rnd_lst), key=lambda pair: pair[1])]
+
+def alert(data , msg_type : MessageType):
+    
+    if type(data) == tuple:
+        createAlert(data[0], msg_type)
+        createAlert(data[1], msg_type)
+    else:
+        createAlert(data, msg_type)    
+
+def getNumber(name):
+    """
+    Receives a string and returns a phone number
+    """
+    return _Team[name]
+
+
+
+def createAlert(data, msg_Type : MessageType):
+    match msg_Type:
+        case MessageType.reminder:
+            sendAlert(message="",
+                      number = getNumber(data))
+        case MessageType.NewPeriod:
+            for name in data:
+                sendAlert(message="",
+                          number = getNumber(name))
+
+def sendAlert(message, number = None):
+    pass
