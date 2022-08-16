@@ -3,15 +3,20 @@ from time import sleep
 from config import MessageType, status,_Hour, day, _1PM, _8AM, _8PM
 from functions import isToday, scramble, alert
 from queue import Queue
+import readJSON
+from mail import Mail
+
 class HappyApp:
     def __init__(self, team : dict):
         self.team = team
         self.roll()
+        port, sender_email, sender_pw = readJSON().credentials()
+        self.mail = Mail(port, sender_email, sender_pw)
 
     def roll(self):
 
-        keva_names =  [k for k, v in self.team.items() if v[1] == status.keva]
-        sadir_names = [k for k, v in self.team.items() if v[1] == status.sadir]
+        keva_names  = list(readJSON().keva().keys())
+        sadir_names = list(readJSON().sadir().keys())
 
         sadir_names_rnd = scramble(sadir_names)
 
@@ -30,10 +35,12 @@ class HappyApp:
         self.queue.dequeue()
         if self.queue.isEmpty():
             self.roll()
-            alert(data=self.queue.getQueue(),
+            alert(self.mail,
+                  data=self.queue.getQueue(),
                   msg_type=MessageType.NewPeriod)
         else:
-            alert(data=self.queue.head(), 
+            alert(self.mail,
+                  data=self.queue.head(), 
                   msg_type=MessageType.reminder)
 
     def run(self):

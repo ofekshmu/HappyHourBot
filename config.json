@@ -1,0 +1,20 @@
+{
+    "Mador" : {
+        "Keva" : {
+            "Harel Finaly" : ["",""],
+            "Raz Gino" : ["",""]
+        },
+        "Sadir" : {
+            "Ofek Shmuel": ["Ofek.Shmuel1@gmail.com", "0543238582" ],
+            "Ofek Ofir" : ["",""],
+            "Koren Minchev" : ["",""],
+            "Alon Alexander" : ["",""]
+        }
+    }, 
+
+    "Credentials": {
+        "port" : 465,
+        "sender email" : "meshulavim14@gmail.com", 
+        "password" : "lmquobcbwgocuwrs"
+    }
+}
