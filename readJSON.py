@@ -24,3 +24,14 @@ class Myjson:
 
     def sadir(self):
         return self.data['Mador']['Sadir']
+
+    def getMail(self, name):
+        """
+        Given a name, return its Mail. returns error if doesnt exist.
+        """
+        if name in self.keva().keys():
+            return self.keva()[name][0]
+        if name in self.sadir().keys():
+            return self.sadir()[name][0]
+
+        raise KeyError("Name received in 'getMail' does not match data.")

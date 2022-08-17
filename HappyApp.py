@@ -7,14 +7,14 @@ import readJSON
 from mail import Mail
 
 class HappyApp:
-    def __init__(self, team : dict):
-        self.team = team
-        self.roll()
+    def __init__(self,):
+        self.__roll()
         port, sender_email, sender_pw = readJSON().credentials()
         self.mail = Mail(port, sender_email, sender_pw)
 
-    def roll(self):
+    def __roll(self):
 
+        # Read names
         keva_names  = list(readJSON().keva().keys())
         sadir_names = list(readJSON().sadir().keys())
 
@@ -31,10 +31,10 @@ class HappyApp:
 
         self.queue = Queue(scramble(tot_names))
 
-    def popQueue(self):
+    def __popQueue(self):
         self.queue.dequeue()
         if self.queue.isEmpty():
-            self.roll()
+            self.__roll()
             alert(self.mail,
                   data=self.queue.getQueue(),
                   msg_type=MessageType.NewPeriod)
@@ -54,5 +54,5 @@ class HappyApp:
                 alert(self.queue.head(), MessageType.reminder)
 
             if isToday(day.wednesday, _1PM):
-                self.popQueue()
+                self.__popQueue()
 
