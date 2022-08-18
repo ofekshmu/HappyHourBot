@@ -1,18 +1,16 @@
 import smtplib, ssl
-
+import readJSON
 
 
 class Mail:
-    def __init__(self, port, sender_email, sender_pw):
+    def __init__(self):
 
-        # self.port = port
-        # self.sender_email = sender_email
-        # self.sender_pw = sender_pw
+        port, sender_email, sender_pw = readJSON().credentials()
+        self.port = port  # For SSL
+        self.sender_email = sender_email
+        self.password = sender_pw
 
-        self.port = 465  # For SSL
         self.smtp_server = "smtp.gmail.com"
-        self.sender_email = "meshulavim14@gmail.com"  # Enter your address
-        self.password = "lmquobcbwgocuwrs"
 
     def sendMail(self, receiver_email, message):
 

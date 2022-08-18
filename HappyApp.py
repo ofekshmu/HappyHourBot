@@ -1,16 +1,18 @@
 from datetime import datetime
 from time import sleep 
-from config import MessageType, status,_Hour, day, _1PM, _8AM, _8PM
+from config import MessageType, Hour, day, _1PM, _8AM, _9PM
 from functions import isToday, scramble, alert
 from queue import Queue
 import readJSON
+from random import shuffle
 from mail import Mail
 
 class HappyApp:
     def __init__(self,):
+        # For taking into account a sadir solider who was chosen to solo
+        self.sadirLeftOver = None
         self.__roll()
-        port, sender_email, sender_pw = readJSON().credentials()
-        self.mail = Mail(port, sender_email, sender_pw)
+        self.mail = Mail()
 
     def __roll(self):
 
@@ -18,18 +20,25 @@ class HappyApp:
         keva_names  = list(readJSON().keva().keys())
         sadir_names = list(readJSON().sadir().keys())
 
-        sadir_names_rnd = scramble(sadir_names)
+        # Remove from current round a sadir solider who soloed last round
+        if self.sadirLeftOver in sadir_names:
+            sadir_names.remove(self.sadirLeftOver)
+            self.sadirLeftOver = None
 
-        sadir_pairs = [(sadir_names_rnd[i],
-                       sadir_names_rnd[i+1])
-                       for i in range(0, len(sadir_names_rnd) - 1, 2)]
+        shuffle(sadir_names)
 
-        if len(sadir_names_rnd) % 2 != 0:
-            sadir_pairs += sadir_names_rnd[-1]
+        sadir_pairs = [(sadir_names[i],
+                       sadir_names[i+1])
+                       for i in range(0, len(sadir_names) - 1, 2)]
+
+        if len(sadir_names) % 2 != 0:
+            self.sadirLeftOver = sadir_names[-1]
+            sadir_pairs += sadir_names[-1]
 
         tot_names = sadir_pairs + keva_names
 
-        self.queue = Queue(scramble(tot_names))
+        shuffle(tot_names)
+        self.queue = Queue(tot_names)
 
     def __popQueue(self):
         self.queue.dequeue()
@@ -47,11 +56,13 @@ class HappyApp:
 
         while True:
 
-            if isToday(day.saturday, _8PM):
+            if isToday(day.saturday, _9PM):
                 alert(self.queue.head(), MessageType.reminder)
 
             if isToday(day.tuesday, _8AM):
                 alert(self.queue.head(), MessageType.reminder)
+
+            sleep(Hour)
 
             if isToday(day.wednesday, _1PM):
                 self.__popQueue()

@@ -1,25 +1,10 @@
 from math import remainder
-import random
 from datetime import datetime
 from typing import List
-
 from .readJSON import Myjson
-from .HappyApp import HappyApp
-from config import day, _Team, MessageType
+from config import day, MessageType
 from mail import Mail
 
-def random_lst_gen(n : int):
-    """
-    input: n - a positive integer number
-    output: a random sequence of numbers from 1 to n
-            sequence has all unique numbers
-    """
-    lst = list(range(n))
-    rnd_lst = []
-    for _ in range(n):
-        i = random.randint(0,len(lst) - 1)
-        rnd_lst.append(lst.pop(i))
-    return rnd_lst
 
 def isToday(d : day, time = None):
     """
@@ -32,14 +17,6 @@ def isToday(d : day, time = None):
     else:
         return datetime.today().weekday() == day.value and \
             time == datetime.today().hour
-
-def scramble(lst : List):
-    """
-    Input: lst of strings
-    Output: scrambled list according to indexes given by 'random_lst_gen'
-    """
-    rnd_lst = random_lst_gen(len(lst))
-    return [x for _, x in sorted(zip(lst, rnd_lst), key=lambda pair: pair[1])]
 
 def alert(data , msg_type : MessageType):
     """
@@ -63,8 +40,45 @@ def createAlert(mail : Mail, data, msg_Type : MessageType):
     match msg_Type:
         case MessageType.reminder:
             mail.sendMail(receiver_email= Myjson.getMail(data),
-                          message = "") # TODO add message
+                          message = reminderMsg(data))
         case MessageType.NewPeriod:
             for name in data:
                 mail.sendMail(receiver_email= Myjson.getMail(name),
-                              message = "") # TODO add message
+                              message = newPeriodMsg(data)) 
+
+def reminderMsg(name):
+    return f""" \
+    היי {name}, זה אפק בוט!
+    רק מזכיר שהגיע תורך להאכיל את מדור 14 ברביעי הקרוב.
+    אז אל תשכח להתכונן מראש ולהכין את מה שצריך.
+    ה happy hour קורה בשעה עשר ולא מוקדם מזה.
+
+    הסנטדרד המדורי הוא
+    - לחם
+    - ממרחים
+    - חלב
+    - כריות
+    - מאפים
+    - גבנ"צ
+
+    בברכה,
+    אפק בוט
+    """
+
+def newPeriodMsg(names):
+    wednesday = datetime.date.today()
+    msg = f"""
+    היי, זה אפק בוט!
+    התחלנו סבב חדש ואלו השיבוצים:
+
+    """
+    for name in names:
+        wednesday = wednesday + datetime.timedelta(days=7)
+        msg += f"name: {wednesday}."
+    
+    msg = """
+    \nאפק בוט לא תומך בשינויים כרגע.
+    בברכה,
+    אפק בוט
+    """
+    return msg

@@ -14,7 +14,7 @@ class MessageType(Enum):
     NewPeriod = 1
 
 
-_Hour = 60*60
+Hour = 60*60
 _8AM = 8
-_8PM = 20
+_9PM = 21
 _1PM = 13
