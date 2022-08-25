@@ -1,7 +1,6 @@
-from math import remainder
 from datetime import datetime
 from typing import List
-from .readJSON import Myjson
+from readJSON import Myjson
 from config import day, MessageType
 from mail import Mail
 
@@ -13,25 +12,25 @@ def isToday(d : day, time = None):
     Output: True if current time matches day and hour, else False.
     """
     if time == None:
-        return datetime.today().weekday() == day.value
+        return datetime.today().weekday() == d.value
     else:
-        return datetime.today().weekday() == day.value and \
+        return datetime.today().weekday() == d.value and \
             time == datetime.today().hour
 
-def alert(data , msg_type : MessageType):
+def alert(mail : Mail, data , msg_type : MessageType):
     """
     Input: @data - relevant data for send a message.
            @msg_type - message type enum
-    Calls 'createalert' according to data
+    Calls 'create_alert' according to data
     """
     # Case where data is combined out of 2 different names (sadir soliders)
     if type(data) == tuple:
-        createAlert(data[0], msg_type)
-        createAlert(data[1], msg_type)
+        create_alert(mail, data[0], msg_type)
+        create_alert(mail, data[1], msg_type)
     else:
-        createAlert(data, msg_type)    
+        create_alert(mail, data, msg_type)    
 
-def createAlert(mail : Mail, data, msg_Type : MessageType):
+def create_alert(mail : Mail, data, msg_Type : MessageType):
     """
     Create and send message according to the @msg_Type
     @mail - mail object for sending mail
@@ -41,7 +40,7 @@ def createAlert(mail : Mail, data, msg_Type : MessageType):
         case MessageType.reminder:
             mail.sendMail(receiver_email= Myjson.getMail(data),
                           message = reminderMsg(data))
-        case MessageType.NewPeriod:
+        case MessageType.new_period:
             for name in data:
                 mail.sendMail(receiver_email= Myjson.getMail(name),
                               message = newPeriodMsg(data)) 

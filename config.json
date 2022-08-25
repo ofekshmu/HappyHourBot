@@ -10,11 +10,5 @@
             "Koren Minchev" : ["",""],
             "Alon Alexander" : ["",""]
         }
-    }, 
-
-    "Credentials": {
-        "port" : 465,
-        "sender email" : "meshulavim14@gmail.com", 
-        "password" : "lmquobcbwgocuwrs"
     }
 }

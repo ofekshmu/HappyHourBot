@@ -11,8 +11,7 @@ class day(Enum):
 
 class MessageType(Enum):
     reminder = 0
-    NewPeriod = 1
-
+    new_period = 1
 
 Hour = 60*60
 _8AM = 8

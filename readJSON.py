@@ -1,23 +1,34 @@
 import json
+from shutil import ReadError
 
 class Myjson:
     def __init__(self):
         self.readConfig()
+        self.readCreds()
     
     def readConfig(self):
-       
-        f = open('config.json')
-        self.data = json.load(f)
-        f.close()
-    
+        try:
+            f = open('config.json')
+            self.data = json.load(f)
+            f.close()
+        except:
+            raise ReadError("Error while trying to load config.json")    
+    def readCreds(self):
+        try:
+            f = open('credentials.json')
+            self.cred = json.load(f)["Credentials"]
+            f.close()
+        except:
+            raise ReadError("Error while trying to load credentials.json")    
+
+
     def madorInfo(self):
         return self.data["Mador"]
 
     def credentials(self):
-        dict = self.data["Credentials"]
-        return dict['port'], \
-               dict['sender email'], \
-               dict['password']
+        return self.cred['port'], \
+               self.cred['sender email'], \
+               self.cred['password']
     
     def keva(self):
         return self.data['Mador']['Keva']
