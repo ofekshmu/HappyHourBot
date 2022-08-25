@@ -4,7 +4,7 @@ from readJSON import Myjson
 from config import day, MessageType
 from mail import Mail
 
-
+# Turn this functions 
 def isToday(d : day, time = None):
     """
     Input: @time - integer constant indicating an hour 0 - 23

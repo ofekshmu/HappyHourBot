@@ -1,5 +1,6 @@
 import smtplib, ssl
 from readJSON import Myjson
+from email.message import EmailMessage
 
 
 class Mail:
@@ -15,6 +16,15 @@ class Mail:
         else:
             self.smtp_server = "localhost"
             self.port = 1025
+
+    def createMail(self, subject="",body=""):
+        self.message_obj = EmailMessage()
+        self.message_obj['Subject'] = subject
+        self.message_obj['From']
+        self.message_obj['To']
+        self.message_obj.set_content(body)
+        #TODO reset mail,
+        #implement in code
 
     def sendMail(self, receiver_email, message):
 
