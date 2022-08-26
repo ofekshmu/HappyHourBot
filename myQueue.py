@@ -24,5 +24,5 @@ class MyQueue:
         return len(self.q) == 0
 
     def getQueue(self):
-        return self.queue
+        return self.q
 

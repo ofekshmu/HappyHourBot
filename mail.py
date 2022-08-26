@@ -19,17 +19,8 @@ class Mail:
             self.smtp_server = "localhost"
             self.port = 1025
 
-    def createMail(self, subject="",body=""):
-        self.message_obj = EmailMessage()
-        #self.message_obj['Subject'] = subject
-        #self.message_obj['From'] = self.sender_email
-        self.message_obj.set_content(body)
-        #TODO reset mail,
-        #implement in code
-
     def sendMail(self, receiver_email, message=None):
 
-        self.createMail( subject= "This is my subject", body= "This is my body")
 
         if message == None:
             message = self.message_obj
@@ -37,9 +28,9 @@ class Mail:
 
         if self.local:        
             with smtplib.SMTP(self.smtp_server, self.port) as server:
-                server.sendmail(self.sender_email, receiver_email, self.message_obj)
+                server.sendmail(self.sender_email, "ofek.shmuel1@gmail.com", message)
         else:
             context = ssl.create_default_context()
             with smtplib.SMTP_SSL(self.smtp_server, self.port, context=context) as server:
                 server.login(self.sender_email, self.password)
-                server.sendmail(self.sender_email, receiver_email, self.message_obj)
+                server.sendmail(self.sender_email, receiver_email, message)

@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime,date,timedelta
 from typing import List
 from readJSON import Myjson
 from config import day, MessageType
@@ -46,44 +46,48 @@ def create_alert(mail : Mail, data, msg_Type : MessageType):
             mail.sendMail(receiver_email= Myjson().getMail(data),
                         message = reminderMsg(data))
         case MessageType.new_period:
-            for name in data:
-                mail.sendMail(receiver_email= Myjson().getMail(name),
-                            message = newPeriodMsg(data)) 
+            recv = []
+            for e in data:
+                if type(e) == tuple:
+                    recv.append(e[0])
+                    recv.append(e[1])
+                else:
+                    recv.append(e)
+            recv = [Myjson().getMail(name) for name in recv]
+            mail.sendMail(receiver_email= recv,
+                          message = newPeriodMsg(data)) 
 
 def newPeriodMsg(names):
-    wednesday = datetime.date.today()
+    wednesday = date.today()
     msg = f"""
-    היי, זה אפק בוט!
-    התחלנו סבב חדש ואלו השיבוצים:
-
-    """
+    Hi! Its Afek Bot
+    A new Round of HH has started, These are the results:\n\n"""
     for name in names:
-        wednesday = wednesday + datetime.timedelta(days=7)
-        msg += f"name: {wednesday}."
+        wednesday = wednesday + timedelta(days=7)
+        msg += f"    {name} -> {wednesday}\n"
     
-    msg = """
-    \nאפק בוט לא תומך בשינויים כרגע.
-    בברכה,
-    אפק בוט
+    msg += """
+    Currently, I do not support Changes, So dont mess up.
     """
     return msg
 
 
 def reminderMsg(name):
-    return f""" \
-    היי {name}, זה אפק בוט!
-    רק מזכיר שהגיע תורך להאכיל את מדור 14 ברביעי הקרוב.
-    אז אל תשכח להתכונן מראש ולהכין את מה שצריך.
-    ה happy hour קורה בשעה עשר ולא מוקדם מזה.
+    return f"""\
+    Hi {name} ! Its Afek bot
+    Just reminding you that its your time to feed the 14 Section this week,
+    So dont forget to prepare ahead of time and get all that is needed.
+    Your Due daye is WednesDay ??/??/???? At 10 AM
 
-    הסנטדרד המדורי הוא
-    - לחם
-    - ממרחים
-    - חלב
-    - כריות
-    - מאפים
-    - גבנ"צ
+    Our Section Standard is:
+    - Bread
+    - Yellow Cheese
+    - Milk
+    - Spreads such as Pesto/garlic/Tapenad
+    - Baked Goods
 
-    בברכה,
-    אפק בוט
+    Every thing is welcomed.
+
+    Yours,
+    Afek Bot
     """

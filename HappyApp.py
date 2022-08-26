@@ -88,7 +88,7 @@ class HappyApp:
             if not self.debug:
                 sleep(Hour)
             else:
-                print(self.__debugTime(0.05))
+                print(self.__debugTime(0.001))
 
 
             if Msg.isToday(day.wednesday, _1PM,
