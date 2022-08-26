@@ -7,14 +7,16 @@ from mail import Mail
 class Msg:
 
     @staticmethod
-    def isToday(d : day, time = None):
+    def isToday(d : day, time, debug_time, debug):
         """
         Input: @time - integer constant indicating an hour 0 - 23
             @d - day enum 
         Output: True if current time matches day and hour, else False.
         """
-        if time == None:
-            return datetime.today().weekday() == d.value
+        if debug:
+            offset = 1
+            return d.value + offset == debug_time[0] and \
+                time == debug_time[1]
         else:
             return datetime.today().weekday() == d.value and \
                 time == datetime.today().hour
@@ -41,11 +43,11 @@ def create_alert(mail : Mail, data, msg_Type : MessageType):
     """
     match msg_Type:
         case MessageType.reminder:
-            mail.sendMail(receiver_email= Myjson.getMail(data),
+            mail.sendMail(receiver_email= Myjson().getMail(data),
                         message = reminderMsg(data))
         case MessageType.new_period:
             for name in data:
-                mail.sendMail(receiver_email= Myjson.getMail(name),
+                mail.sendMail(receiver_email= Myjson().getMail(name),
                             message = newPeriodMsg(data)) 
 
 def newPeriodMsg(names):

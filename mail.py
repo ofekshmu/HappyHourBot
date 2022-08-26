@@ -20,19 +20,21 @@ class Mail:
     def createMail(self, subject="",body=""):
         self.message_obj = EmailMessage()
         self.message_obj['Subject'] = subject
-        self.message_obj['From']
-        self.message_obj['To']
+        self.message_obj['From'] = self.sender_email
         self.message_obj.set_content(body)
         #TODO reset mail,
         #implement in code
 
-    def sendMail(self, receiver_email, message):
+    def sendMail(self, receiver_email, message=None):
+        if message == None:
+            message = self.message_obj
+            self.message_obj['To'] = receiver_email
 
         if self.local:        
             with smtplib.SMTP(self.smtp_server, self.port) as server:
-                server.sendmail(self.sender_email, receiver_email, message)
+                server.sendmail(self.sender_email, receiver_email, message.encode('utf8'))
         else:
             context = ssl.create_default_context()
             with smtplib.SMTP_SSL(self.smtp_server, self.port, context=context) as server:
                 server.login(self.sender_email, self.password)
-                server.sendmail(self.sender_email, receiver_email, message)
+                server.sendmail(self.sender_email, receiver_email, message.encode('utf8'))

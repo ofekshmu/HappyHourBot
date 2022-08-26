@@ -1,5 +1,5 @@
 
-class Queue:
+class MyQueue:
     def __init__(self, lst = []):
         self.q = lst
     
