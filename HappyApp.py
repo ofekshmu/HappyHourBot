@@ -13,13 +13,13 @@ class HappyApp:
 
         # debug tools
         self.debug = debug
-        self.curr_day = 4
+        self.curr_day = 3
         self.curr_hour = 0
 
         # For taking into account a sadir solider who was chosen to solo
         self.sadir_left_over = None
         self.db = Myjson()
-        self.__roll()
+        self.queue = MyQueue()
         self.mail = Mail(local = debug)
 
     def __roll(self):
@@ -49,13 +49,13 @@ class HappyApp:
         self.queue = MyQueue(all_names)
 
     def __popQueue(self):
-        self.queue.dequeue()
         if self.queue.isEmpty():
             self.__roll()
             Msg.alert(self.mail,
                   data=self.queue.getQueue(),
                   msg_type=MessageType.new_period)
         else:
+            self.queue.dequeue()
             Msg.alert(self.mail,
                   data=self.queue.head(), 
                   msg_type=MessageType.reminder)
@@ -69,6 +69,13 @@ class HappyApp:
 
     def run(self):
         while True:
+
+            if Msg.isToday(day.wednesday, _1PM,
+                           debug_time = (self.curr_day, self.curr_hour),
+                           debug = self.debug ):
+                if self.debug: 
+                    print(f"Its now: Wednesday 1Pm")
+                self.__popQueue()
 
             if Msg.isToday(day.saturday, _9PM, 
                            debug_time = (self.curr_day, self.curr_hour),
@@ -91,11 +98,5 @@ class HappyApp:
                 print(self.__debugTime(0.001))
 
 
-            if Msg.isToday(day.wednesday, _1PM,
-                           debug_time = (self.curr_day, self.curr_hour),
-                           debug = self.debug ):
-                if self.debug: 
-                    print(f"Its now: Wednesday 1Pm")
-                self.__popQueue()
 
 
