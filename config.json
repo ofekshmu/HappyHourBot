@@ -2,13 +2,19 @@
     "Mador" : {
         "Keva" : {
             "Harel Finaly" : ["",""],
-            "Raz Gino" : ["",""]
+            "Raz Gino" : ["",""],
+            "Dudu Eliyahu": ["",""],
+            "Almog Kerdstein": ["",""],
+            "Noam Barkay" : ["",""]
         },
         "Sadir" : {
-            "Ofek Shmuel": ["Ofek.Shmuel1@gmail.com", "0543238582" ],
-            "Ofek Ophir" : ["",""],
-            "Koren Minchev" : ["",""],
-            "Alon Alexander" : ["",""]
+            "Ofek Shmuel": ["Ofek.Shmuel1@gmail.com", "0543238582"],
+            "Ofek Ophir" : ["ophir.ofek@gmail.com",""],
+            "Koren Minchev" : ["korenminchev@gmail.com","0544917728"],
+            "Alon Alexander" : ["",""],
+            "Nadav Montel" : ["",""],
+            "Matan Har-Noy" : ["",""],
+            "Yoni Marko" : ["",""]
         }
     }
 }

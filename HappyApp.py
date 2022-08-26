@@ -1,7 +1,7 @@
 from datetime import datetime
 from time import sleep 
 from config import MessageType, Hour, day, _1PM, _8AM, _9PM
-from functions import isToday, alert
+from functions import Msg
 from queue import Queue
 from readJSON import Myjson
 from random import shuffle
@@ -45,28 +45,28 @@ class HappyApp:
         self.queue.dequeue()
         if self.queue.isEmpty():
             self.__roll()
-            alert(self.mail,
+            Msg.alert(self.mail,
                   data=self.queue.getQueue(),
                   msg_type=MessageType.new_period)
         else:
-            alert(self.mail,
+            Msg.alert(self.mail,
                   data=self.queue.head(), 
                   msg_type=MessageType.reminder)
 
     def run(self, debug):
         while True:
 
-            if isToday(day.saturday, _9PM):
-                alert(self.queue.head(), MessageType.reminder)
+            if Msg.isToday(day.saturday, _9PM):
+                Msg.alert(self.queue.head(), MessageType.reminder)
 
-            if isToday(day.tuesday, _8AM):
-                alert(self.queue.head(), MessageType.reminder)
+            if Msg.isToday(day.tuesday, _8AM):
+                Msg.alert(self.queue.head(), MessageType.reminder)
 
             print("TEST - before")
             self.mail.sendMail("ofek.shmuel1@gmail.com", "This will work now")
             print("TEST - after")
             sleep(Hour)
 
-            if isToday(day.wednesday, _1PM):
+            if Msg.isToday(day.wednesday, _1PM):
                 self.__popQueue()
 

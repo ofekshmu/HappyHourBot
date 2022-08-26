@@ -4,31 +4,34 @@ from readJSON import Myjson
 from config import day, MessageType
 from mail import Mail
 
-# Turn this functions 
-def isToday(d : day, time = None):
-    """
-    Input: @time - integer constant indicating an hour 0 - 23
-           @d - day enum 
-    Output: True if current time matches day and hour, else False.
-    """
-    if time == None:
-        return datetime.today().weekday() == d.value
-    else:
-        return datetime.today().weekday() == d.value and \
-            time == datetime.today().hour
+class Msg:
 
-def alert(mail : Mail, data , msg_type : MessageType):
-    """
-    Input: @data - relevant data for send a message.
-           @msg_type - message type enum
-    Calls 'create_alert' according to data
-    """
-    # Case where data is combined out of 2 different names (sadir soliders)
-    if type(data) == tuple:
-        create_alert(mail, data[0], msg_type)
-        create_alert(mail, data[1], msg_type)
-    else:
-        create_alert(mail, data, msg_type)    
+    @staticmethod
+    def isToday(d : day, time = None):
+        """
+        Input: @time - integer constant indicating an hour 0 - 23
+            @d - day enum 
+        Output: True if current time matches day and hour, else False.
+        """
+        if time == None:
+            return datetime.today().weekday() == d.value
+        else:
+            return datetime.today().weekday() == d.value and \
+                time == datetime.today().hour
+
+    @staticmethod
+    def alert(mail : Mail, data , msg_type : MessageType):
+        """
+        Input: @data - relevant data for send a message.
+            @msg_type - message type enum
+        Calls 'create_alert' according to data
+        """
+        # Case where data is combined out of 2 different names (sadir soliders)
+        if type(data) == tuple:
+            create_alert(mail, data[0], msg_type)
+            create_alert(mail, data[1], msg_type)
+        else:
+            create_alert(mail, data, msg_type)    
 
 def create_alert(mail : Mail, data, msg_Type : MessageType):
     """
@@ -39,11 +42,30 @@ def create_alert(mail : Mail, data, msg_Type : MessageType):
     match msg_Type:
         case MessageType.reminder:
             mail.sendMail(receiver_email= Myjson.getMail(data),
-                          message = reminderMsg(data))
+                        message = reminderMsg(data))
         case MessageType.new_period:
             for name in data:
                 mail.sendMail(receiver_email= Myjson.getMail(name),
-                              message = newPeriodMsg(data)) 
+                            message = newPeriodMsg(data)) 
+
+def newPeriodMsg(names):
+    wednesday = datetime.date.today()
+    msg = f"""
+    היי, זה אפק בוט!
+    התחלנו סבב חדש ואלו השיבוצים:
+
+    """
+    for name in names:
+        wednesday = wednesday + datetime.timedelta(days=7)
+        msg += f"name: {wednesday}."
+    
+    msg = """
+    \nאפק בוט לא תומך בשינויים כרגע.
+    בברכה,
+    אפק בוט
+    """
+    return msg
+
 
 def reminderMsg(name):
     return f""" \
@@ -63,21 +85,3 @@ def reminderMsg(name):
     בברכה,
     אפק בוט
     """
-
-def newPeriodMsg(names):
-    wednesday = datetime.date.today()
-    msg = f"""
-    היי, זה אפק בוט!
-    התחלנו סבב חדש ואלו השיבוצים:
-
-    """
-    for name in names:
-        wednesday = wednesday + datetime.timedelta(days=7)
-        msg += f"name: {wednesday}."
-    
-    msg = """
-    \nאפק בוט לא תומך בשינויים כרגע.
-    בברכה,
-    אפק בוט
-    """
-    return msg
