@@ -4,7 +4,7 @@ from pymongo import MongoClient
 import json
 
 class Mongo:
-    def __init__(self):
+    def __init__(self, Empty = False):
         f = open('credentials.json')
         dict = json.load(f)["Mongo Credentials"]
         password = dict["DBpassword"]
@@ -15,9 +15,21 @@ class Mongo:
         self.db = cluster["happy_hour"]
         self.collection = self.db["section"]
 
-    def insert(self, row):
-        self.collection.insert_one(row)
 
-db = Mongo()
-print("Initialized - Success")
-db.insert({"_id":1,"name":"ofek"})
+    def insert_user(self, name, mail):
+        pass
+
+    def delete_user(self, name):
+        pass
+
+    def update_user(self, name, mail = None, phone = None):
+        pass
+
+    def insert_round(self, name_lst):
+        pass
+
+    def get_round(self, date):
+        pass
+
+    def get_recent_round(self):
+        pass
