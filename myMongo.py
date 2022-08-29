@@ -3,8 +3,10 @@ from pymongo import MongoClient
 import json
 from datetime import datetime
 
+from readJSON import Myjson
+
 class Mongo:
-    def __init__(self, Empty = False):
+    def __init__(self):
         f = open('credentials.json')
         dict = json.load(f)["Mongo Credentials"]
         password = dict["DBpassword"]
@@ -16,6 +18,10 @@ class Mongo:
         self.section = self.db["section"]
         self.rounds = self.db["rounds"]
 
+    def load_initial_db(self):
+        dict = json.load(open('config.json'))
+        self.section.insert_many([{k:v} for k, v in dict.items()])
+        print("Completed 'load_initial_db'...")
 
     def insert_user(self, id, name, mail):
         """Get user info and inserts to database
@@ -57,3 +63,6 @@ class Mongo:
 
     def get_recent_round(self):
         pass
+
+mymongo = Mongo()
+mymongo.load_initial_db()
