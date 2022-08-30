@@ -20,7 +20,7 @@ class Mongo:
 
     def load_initial_db(self):
         dict = json.load(open('config.json'))
-        self.section.insert_many([{k:v} for k, v in dict.items()])
+        self.db['section'].insert_many([{k:v} for k, v in dict.items()])
         print("Completed 'load_initial_db'...")
 
     def insert_user(self, id, name, mail):
@@ -71,6 +71,7 @@ class Mongo:
             A randomly sorted list of names.
         """
         self.db['rounds'].insert_one({"_id": datetime.now(), "queue": name_lst })
+        return True
 
     def get_round(self, date):
         """ get a specific round upon a given date
@@ -88,10 +89,11 @@ class Mongo:
             raise KeyError(f"O-Error: the date {date} is not found in data 'section'.")
 
     def get_recent_round(self):
-        if self.db['rounds'].count_documents(limit=1):
-            return self.db['rounds'].find().sort({'_id':-1}).limit(1)
+        """
+        """
+        if self.db['rounds'].count_documents({}, limit=1):
+            answer = self.db['rounds'].find().sort("_id",-1).limit(1)
+            for x in answer:
+                return x
         else:
             raise NotFoundErr(f"O-Error: No rounds in data base.")
-
-mymongo = Mongo()
-mymongo.load_initial_db()
