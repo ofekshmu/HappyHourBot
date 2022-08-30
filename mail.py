@@ -28,7 +28,7 @@ class Mail:
 
         if self.local:        
             with smtplib.SMTP(self.smtp_server, self.port) as server:
-                server.sendmail(self.sender_email, "ofek.shmuel1@gmail.com", message)
+                server.sendmail(self.sender_email, receiver_email, message)
         else:
             context = ssl.create_default_context()
             with smtplib.SMTP_SSL(self.smtp_server, self.port, context=context) as server:

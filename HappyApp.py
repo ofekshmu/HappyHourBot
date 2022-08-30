@@ -91,11 +91,10 @@ class HappyApp:
                     print(f"Its now: Tuesday 8PM")
                 Msg.alert(self.mail, self.queue.head(), MessageType.reminder)
 
-
             if not self.debug:
                 sleep(Hour)
             else:
-                print(self.__debugTime(0.001))
+                print(self.__debugTime(0.5))
 
 
 

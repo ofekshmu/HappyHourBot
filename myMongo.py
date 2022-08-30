@@ -4,7 +4,6 @@ import certifi
 from pymongo import MongoClient
 import json
 from datetime import datetime
-
 from readJSON import Myjson
 
 class Mongo:
@@ -17,13 +16,12 @@ class Mongo:
         cluster = MongoClient(f"mongodb+srv://{user_name}:{password}@cluster0.liy1wfj.mongodb.net/?retryWrites=true&w=majority", tlsCAFile=ca)
         self.db = cluster["happy_hour"]
 
-
     def load_initial_db(self):
         dict = json.load(open('config.json'))
         self.db['section'].insert_many([{k:v} for k, v in dict.items()])
         print("Completed 'load_initial_db'...")
 
-    def insert_user(self, id, name, mail):
+    def insert_user(self, id: int, name: str, mail: str):
         """Get user info and inserts to database
 
         Parameters
@@ -41,10 +39,9 @@ class Mongo:
         self.db['section'].insert_one({"_id": id, "name": name, "mail": mail})
         return True
 
-    def get_users(self, type):
+    def get_users(self, type: str):
         """Returns entire user data according to type parameter
-        for 'all' -> returns 2 dictionaries; keva and sadir
-        for 'sadir'/'keva' -> returns a dictionay 
+        for 'sadir'/'keva' -> returns a dictionary 
          Parameters
         ----------
         type : str
@@ -52,17 +49,15 @@ class Mongo:
             values allowed are 'sadir'/'keva'/'all'
         """
         match type:
-            case 'all':
-                return self.db['section']
             case 'sadir':
-                return self.db['section']['Sadir']
+                return self.db['section'].find_one({"Sadir":{'$exists': True}})['Sadir']
             case 'keva':
-                return self.db['section']['Keva']
+                return self.db['section'].find_one({"Keva":{'$exists': True}})['Keva']
             case other:
                 raise ValueError(f"O-Error: Wrong input argument ({type}) in get_users\n\
                                   Should be 'sadir'/'keva'/'all'")
 
-    def insert_round(self, name_lst):
+    def insert_round(self, name_lst: list):
         """Insert a new, random, name list to the database
 
         Parameters
@@ -73,7 +68,7 @@ class Mongo:
         self.db['rounds'].insert_one({"_id": datetime.now(), "queue": name_lst })
         return True
 
-    def get_round(self, date):
+    def get_round(self, date: datetime):
         """ get a specific round upon a given date
         
         Parameters
@@ -97,3 +92,7 @@ class Mongo:
                 return x
         else:
             raise NotFoundErr(f"O-Error: No rounds in data base.")
+
+
+my_db = Mongo()
+my_db.insert_user
