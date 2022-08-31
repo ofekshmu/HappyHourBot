@@ -1,10 +1,8 @@
-from email.policy import default
 from xml.dom import NotFoundErr
 import certifi
 from pymongo import MongoClient
 import json
 from datetime import datetime
-from readJSON import Myjson
 
 class Mongo:
     def __init__(self):
@@ -65,26 +63,36 @@ class Mongo:
         name_lst : List
             A randomly sorted list of names.
         """
-        self.db['rounds'].insert_one({"_id": datetime.now(), "queue": name_lst })
+        date = datetime.now().replace(hour=0,minute=0,second=0,microsecond=0)
+        if self.db['rounds'].count_documents({"_id":date}, limit=1):
+            raise KeyError("O-Error: Key is not unique - multiple insertions in one day")
+        self.db['rounds'].insert_one({"_id": date, "queue": name_lst })
         return True
 
-    def get_round(self, date: datetime):
+    def get_round(self, year: int, month: int, day: int):
         """ get a specific round upon a given date
-        
+        round is of type dict and structure of:
+        {"_id": date, "queue": name_lst }
+
         Parameters
         ----------
-        date : datetime
-            a date of format ??????
-            the date should fit the start date of the relevant round
+        year: int
+            year specificating in a 4 digit format
+        month: int
+            month specification in a 1-2 digit format
+        day: int
+            day specification in a 1-2 digit format
         """
-        
-        if self.db['rounds'].count_documents(date, limit=1):
+        date = datetime(year, month, day)
+        if self.db['rounds'].count_documents({"_id":date}, limit=1):
             return self.db['rounds'].find_one(date)
         else:
             raise KeyError(f"O-Error: the date {date} is not found in data 'section'.")
 
     def get_recent_round(self):
-        """
+        """Returns a dictionary of type:
+        {"_id": date, "queue": name_lst }, matching the
+        most recent date.
         """
         if self.db['rounds'].count_documents({}, limit=1):
             answer = self.db['rounds'].find().sort("_id",-1).limit(1)
@@ -92,7 +100,3 @@ class Mongo:
                 return x
         else:
             raise NotFoundErr(f"O-Error: No rounds in data base.")
-
-
-my_db = Mongo()
-my_db.insert_user
