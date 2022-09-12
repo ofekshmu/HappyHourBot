@@ -1,17 +1,16 @@
 import smtplib, ssl
-from readJSON import Myjson
-from email.message import EmailMessage
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
-from email.header import Header
+import json
+
 
 class Mail:
-    def __init__(self, local = False):
+    def __init__(self, local=False):
 
-        port, sender_email, sender_pw = Myjson().credentials()
-        self.port = port  # For SSL
-        self.sender_email = sender_email
-        self.password = sender_pw
+        f = open('credentials.json')
+        credentials = json.load(f)
+
+        self.port = credentials['port']  # For SSL
+        self.sender_email = credentials['sender mail']
+        self.password = credentials['password']
         self.local = local
         if not local:
             self.smtp_server = "smtp.gmail.com"
@@ -20,13 +19,11 @@ class Mail:
             self.port = 1025
 
     def sendMail(self, receiver_email, message=None):
-
-
-        if message == None:
+        if message is None:
             message = self.message_obj
             self.message_obj['To'] = receiver_email
 
-        if self.local:        
+        if self.local:     
             with smtplib.SMTP(self.smtp_server, self.port) as server:
                 server.sendmail(self.sender_email, receiver_email, message)
         else:
